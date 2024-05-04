@@ -2,6 +2,10 @@
 node_modules
 /dist
 
+# Ignore photos and videos directories in public
+/public/photos/
+/public/videos/
+
 
 # local env files
 .env.local
