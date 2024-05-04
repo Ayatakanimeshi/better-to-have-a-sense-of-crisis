@@ -1,11 +1,7 @@
 <template>
   <div class="home">
-    <img
-      src="/photos/GeorgeFace.jpeg"
-      alt="Study Time Image"
-      class="study-image"
-    />
-    <h1>あなたの今日の勉強時間を報告してね！</h1>
+    <img :src="imageUrl" alt="Study Time Image" class="study-image" />
+    <h1 v-html="messageText"></h1>
     <div class="time-selectors">
       <select v-model="selectedHour">
         <option disabled value="">時</option>
@@ -31,6 +27,10 @@ export default {
     return {
       selectedHour: "",
       selectedMinute: "",
+      imageUrl: "/photos/buibui.jpeg", // 初期画像
+      messageText:
+        "あなたの今日の勉強時間を報告してね！<br>" +
+        "時間に応じてブイズたちが褒めてくれるよ！", // 初期メッセージ
       hours: Array.from({ length: 24 }, (_, i) => i), // 0時から23時
       minutes: [0, 15, 30, 45], // 分を15分単位で選択
     };
@@ -46,6 +46,24 @@ export default {
       }
     },
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (from.name) {
+        // 前のページから遷移した場合
+        vm.imageUrl = "/photos/GeorgeFace.jpeg";
+        vm.messageText = "どうも、メンズコーチを担当するジョージです。"; // 新しいメッセージ
+      }
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.imageUrl = from.name
+      ? "/photos/GeorgeFace.jpeg"
+      : "/photos/buibui.jpeg";
+    this.messageText = from.name
+      ? "どうも、メンズコーチを担当するジョージです。モテたいか？"
+      : "あなたの今日の勉強時間を報告してね！<br />時間に応じてブイズたちが褒めてくれるよ！";
+    next();
+  },
 };
 </script>
 
@@ -59,9 +77,9 @@ export default {
   background-color: #f5f5f5;
 }
 .study-image {
-  max-width: 30%; /* 最大幅を50%に設定 */
-  height: auto; /* 高さは自動調整 */
-  margin-bottom: 20px; /* 下マージン */
+  max-width: 30%;
+  height: auto;
+  margin-bottom: 20px;
 }
 h1 {
   color: #333;
